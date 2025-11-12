@@ -108,13 +108,16 @@ llm = HuggingFacePipeline(
     model_kwargs={"temperature": 0.4}
 )
 
-# Vectorstore
+#VectorStore
+PERSIST_DIR = os.path.expanduser("~/.eyestock/chroma/vectorstore_data")
+os.makedirs(PERSIST_DIR, exist_ok=True)
+
 vectorstore = Chroma(
-    persist_directory="vectorstore_data",
+    persist_directory=PERSIST_DIR,
     collection_name="my_collection",
-    embedding_function=embeddings,
+    embedding_function=embeddings
 )
-retriever = vectorstore.as_retriever(k=30)
+retriever = vectorstore.as_retriever(k=5)
 
 prompt = PromptTemplate.from_template(
     """당신은 *주식/종목* 관련 질문에만 답합니다.
